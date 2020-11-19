@@ -39,5 +39,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           dockerfile: docker/Dockerfile
           registry: docker.pkg.github.com
-          repository: ${{ steps.repo_name.outputs.lowercase }}/jd_docker_ring
+          repository: ${{ steps.repo_name.outputs.lowercase }}/jd_docker_ring1
           tag_with_ref: true
