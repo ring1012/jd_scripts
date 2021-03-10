@@ -6,7 +6,7 @@ name: jd_joy_steal
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 16,22 * * *'
+    - cron: '13 0-21/3 * * *'
   watch:
     types: started
   repository_dispatch:
@@ -35,18 +35,11 @@ jobs:
       - name: npm install
         run: |
           npm install
-      - name: '运行 【宠汪汪偷好友狗粮与积分】'
+      - name: '运行 【jd_joy_steal】'
         run: |
           node jd_joy_steal.js
         env:
           JD_COOKIE: ${{ secrets.JD_COOKIE }}
           JD_DEBUG: ${{ secrets.JD_DEBUG }}
-          JOY_HELP_FEED: ${{ secrets.JOY_HELP_FEED }}
           PUSH_KEY: ${{ secrets.PUSH_KEY }}
-          BARK_PUSH: ${{ secrets.BARK_PUSH }}
-          TG_BOT_TOKEN: ${{ secrets.TG_BOT_TOKEN }}
-          TG_USER_ID: ${{ secrets.TG_USER_ID }}
-          BARK_SOUND: ${{ secrets.BARK_SOUND }}
-          DD_BOT_TOKEN: ${{ secrets.DD_BOT_TOKEN }}
-          DD_BOT_SECRET: ${{ secrets.DD_BOT_SECRET }}
-          IGOT_PUSH_KEY: ${{ secrets.IGOT_PUSH_KEY }}
+
