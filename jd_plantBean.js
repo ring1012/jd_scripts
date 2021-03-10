@@ -23,6 +23,7 @@ cron "1 7-21/2 * * *" script-path=https://gitee.com/lxk0301/jd_scripts/raw/maste
 
 搬的https://github.com/uniqueque/QuantumultX/blob/4c1572d93d4d4f883f483f907120a75d925a693e/Script/jd_plantBean.js
 */
+console.log('print some infos\n')
 const $ = new Env('京东种豆得豆');
 //Node.js用户请在jdCookie.js处填写京东ck;
 //ios等软件用户直接用NobyDa的jd cookie
