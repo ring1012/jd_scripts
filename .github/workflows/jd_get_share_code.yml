@@ -11,6 +11,10 @@ on:
     types: started
   repository_dispatch:
     types: get_share_code
+
+env:
+  TZ: Asia/Shanghai
+
 jobs:
   build:
 
