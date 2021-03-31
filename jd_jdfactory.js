@@ -1,5 +1,5 @@
 /*
- * @Author: LXK9301 https://github.com/LXK9301
+ * @Author: LXK9301 https://ggghhh.com/LXK9301
  * @Date: 2020-12-06 18:19:21
  * @Last Modified by: LXK9301
  * @Last Modified time: 2020-12-26 22:58:02
@@ -17,7 +17,7 @@
 ============Quantumultx===============
 [task_local]
 #东东工厂
-10 * * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js, tag=东东工厂, img-url=https://raw.githubusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
+10 * * * * https://gitee.com/lxk0301/jd_scripts/raw/master/jd_jdfactory.js, tag=东东工厂, img-url=https://raw.ggghhhusercontent.com/58xinian/icon/master/jd_factory.png, enabled=true
 
 ================Loon==============
 [Script]
@@ -59,7 +59,7 @@ const inviteCodes = [`P04z54XCjVWnYaS5u2ak7ZCdan1Bdd2GGiWvC6_uERj`, 'P04z54XCjVW
   for (let i = 0; i < cookiesArr.length; i++) {
     if (cookiesArr[i]) {
       cookie = cookiesArr[i];
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
       $.isLogin = true;
       $.nickName = '';
@@ -86,23 +86,27 @@ const inviteCodes = [`P04z54XCjVWnYaS5u2ak7ZCdan1Bdd2GGiWvC6_uERj`, 'P04z54XCjVW
       $.done();
     })
 async function jdFactory() {
-  await jdfactory_getHomeData();
-  await helpFriends();
-  // $.newUser !==1 && $.haveProduct === 2，老用户但未选购商品
-  // $.newUser === 1新用户
-  if ($.newUser === 1) return
-  await jdfactory_collectElectricity();//收集产生的电量
-  await jdfactory_getTaskDetail();
-  await doTask();
-  await algorithm();//投入电力逻辑
-  await showMsg();
+  try {
+    await jdfactory_getHomeData();
+    await helpFriends();
+    // $.newUser !==1 && $.haveProduct === 2，老用户但未选购商品
+    // $.newUser === 1新用户
+    if ($.newUser === 1) return
+    await jdfactory_collectElectricity();//收集产生的电量
+    await jdfactory_getTaskDetail();
+    await doTask();
+    await algorithm();//投入电力逻辑
+    await showMsg();
+  } catch (e) {
+    $.logErr(e)
+  }
 }
 function showMsg() {
   return new Promise(resolve => {
     if (!jdNotify) {
       $.msg($.name, '', `${message}`);
     } else {
-      $.log(`京东账号${$.index}${$.nickName}\n${message}`);
+      $.log(`${message}`);
     }
     if (new Date().getHours() === 12) {
       $.msg($.name, '', `${message}`);
@@ -445,7 +449,7 @@ function jdfactory_getTaskDetail() {
               $.taskVos = data.data.result.taskVos;//任务列表
               $.taskVos.map(item => {
                 if (item.taskType === 14) {
-                  console.log(`\n【京东账号${$.index}（${$.nickName || $.UserName}）的${$.name}好友互助码】${item.assistTaskDetailVo.taskToken}\n`)
+                  console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${item.assistTaskDetailVo.taskToken}\n`)
                 }
               })
             }
@@ -713,7 +717,7 @@ function TotalBean() {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0")
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
       },
       "timeout": 10000,
     }

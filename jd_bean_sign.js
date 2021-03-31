@@ -5,9 +5,10 @@
 京东多合一签到,自用,可N个京东账号
 活动入口：各处的签到汇总
 Node.JS专用
-IOS软件用户请使用 https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js
-更新时间：2021-3-10
-Modified From github https://github.com/ruicky/jd_sign_bot
+IOS软件用户请使用 https://raw.ggghhhusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js
+更新时间：2021-3-27
+推送通知默认简洁模式(多账号只发送一次)。如需详细通知，设置环境变量 JD_BEAN_SIGN_NOTIFY_SIMPLE 为false即可(N账号推送N次通知)。
+Modified From ggghhh https://ggghhh.com/ruicky/jd_sign_bot
  */
 const $ = new Env('京东多合一签到');
 const notify = $.isNode() ? require('./sendNotify') : '';
@@ -33,19 +34,24 @@ if ($.isNode()) {
     $.msg($.name, '【提示】请先获取cookie\n直接使用NobyDa的京东签到获取', 'https://bean.m.jd.com/bean/signIndex.action', {"open-url": "https://bean.m.jd.com/bean/signIndex.action"});
     return;
   }
+  process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE = process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE ? process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE : 'true';
   await requireConfig();
   // 下载最新代码
   await downFile();
+  if (!await fs.existsSync(JD_DailyBonusPath)) {
+    console.log(`\nJD_DailyBonus.js 文件不存在，停止执行${$.name}\n`);
+    await notify.sendNotify($.name, `本次执行${$.name}失败，JD_DailyBonus.js 文件下载异常，详情请查看日志`)
+    return
+  }
   const content = await fs.readFileSync(JD_DailyBonusPath, 'utf8')
   for (let i =0; i < cookiesArr.length; i++) {
     cookie = cookiesArr[i];
     if (cookie) {
-      $.UserName = decodeURIComponent(cookie.match(/pt_pin=(.+?);/) && cookie.match(/pt_pin=(.+?);/)[1])
+      $.UserName = decodeURIComponent(cookie.match(/pt_pin=([^; ]+)(?=;?)/) && cookie.match(/pt_pin=([^; ]+)(?=;?)/)[1])
       $.index = i + 1;
       $.nickName = '';
       await TotalBean();
       console.log(`*****************开始京东账号${$.index} ${$.nickName || $.UserName}京豆签到*******************\n`);
-      console.log(`⚠️⚠️⚠️⚠️目前Bark APP推送通知消息对推送内容长度有限制，如推送通知中包含此推送方式脚本会默认转换成简洁内容推送 ⚠️⚠️⚠️⚠️\n`)
       await changeFile(content);
       await execSign();
     }
@@ -68,46 +74,42 @@ async function execSign() {
     //   console.log('没有提供通知推送，则打印脚本执行日志')
     //   await exec(`${process.execPath} ${JD_DailyBonusPath}`, { stdio: "inherit" });
     // }
-    if (await fs.existsSync(JD_DailyBonusPath)) {
-      await exec(`${process.execPath} ${JD_DailyBonusPath} >> ${resultPath}`);
-      const notifyContent = await fs.readFileSync(resultPath, "utf8");
-      console.log(`👇👇👇👇👇👇👇👇👇👇👇LOG记录👇👇👇👇👇👇👇👇👇👇👇\n${notifyContent}\n👆👆👆👆👆👆👆👆👆LOG记录👆👆👆👆👆👆👆👆👆👆👆`);
-      // await exec("node JD_DailyBonus.js", { stdio: "inherit" });
-      // console.log('执行完毕', new Date(new Date().getTime() + 8 * 3600000).toLocaleDateString())
-      //发送通知
-      let BarkContent = '';
-      if (fs.existsSync(resultPath)) {
-        const barkContentStart = notifyContent.indexOf('【签到概览】')
-        const barkContentEnd = notifyContent.length;
-        if (process.env.JD_BEAN_SIGN_STOP_NOTIFY === 'true') return
-        if (process.env.BARK_PUSH || notify.BARK_PUSH) process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE = 'true';
-        if (process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE === 'true') {
-          if (barkContentStart > -1 && barkContentEnd > -1) {
-            BarkContent = notifyContent.substring(barkContentStart, barkContentEnd);
-          }
-          BarkContent = BarkContent.split('\n\n')[0];
-        } else {
-          if (barkContentStart > -1 && barkContentEnd > -1) {
-            BarkContent = notifyContent.substring(barkContentStart, barkContentEnd);
-          }
+    await exec(`${process.execPath} ${JD_DailyBonusPath} >> ${resultPath}`);
+    const notifyContent = await fs.readFileSync(resultPath, "utf8");
+    console.log(`👇👇👇👇👇👇👇👇👇👇👇LOG记录👇👇👇👇👇👇👇👇👇👇👇\n${notifyContent}\n👆👆👆👆👆👆👆👆👆LOG记录👆👆👆👆👆👆👆👆👆👆👆`);
+    // await exec("node JD_DailyBonus.js", { stdio: "inherit" });
+    // console.log('执行完毕', new Date(new Date().getTime() + 8 * 3600000).toLocaleDateString())
+    //发送通知
+    let BarkContent = '';
+    if (fs.existsSync(resultPath)) {
+      const barkContentStart = notifyContent.indexOf('【签到概览】')
+      const barkContentEnd = notifyContent.length;
+      if (process.env.JD_BEAN_SIGN_STOP_NOTIFY === 'true') return
+      if (process.env.BARK_PUSH || notify.BARK_PUSH) process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE = 'true';
+      if (process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE === 'true') {
+        if (barkContentStart > -1 && barkContentEnd > -1) {
+          BarkContent = notifyContent.substring(barkContentStart, barkContentEnd);
+        }
+        BarkContent = BarkContent.split('\n\n')[0];
+      } else {
+        if (barkContentStart > -1 && barkContentEnd > -1) {
+          BarkContent = notifyContent.substring(barkContentStart, barkContentEnd);
         }
       }
-      //不管哪个时区,这里得到的都是北京时间的时间戳;
-      const UTC8 = new Date().getTime() + new Date().getTimezoneOffset()*60000 + 28800000;
-      $.beanSignTime = timeFormat(UTC8);
-      console.log(`脚本执行完毕时间：${$.beanSignTime}`)
-      if (BarkContent) {
-        allMessage += `【京东号 ${$.index}】: ${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n${BarkContent}${$.index !== cookiesArr.length ? '\n\n' : ''}`;
-        if (!process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE || (process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE && process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE !== 'true')) {
-          await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}`, `【签到号 ${$.index}】: ${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n${BarkContent}`);
-        }
-      }
-      //运行完成后，删除下载的文件
-      await deleteFile(resultPath);//删除result.txt
-      console.log(`*****************京东账号${$.index} ${$.nickName || $.UserName}京豆签到完成*******************\n`);
-    } else {
-      console.log(`\nJD_DailyBonus.js文件不存在\n`)
     }
+    //不管哪个时区,这里得到的都是北京时间的时间戳;
+    const UTC8 = new Date().getTime() + new Date().getTimezoneOffset()*60000 + 28800000;
+    $.beanSignTime = timeFormat(UTC8);
+    //console.log(`脚本执行完毕时间：${$.beanSignTime}`)
+    if (BarkContent) {
+      allMessage += `【京东号 ${$.index}】: ${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n${BarkContent}${$.index !== cookiesArr.length ? '\n\n' : ''}`;
+      if (!process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE || (process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE && process.env.JD_BEAN_SIGN_NOTIFY_SIMPLE !== 'true')) {
+        await notify.sendNotify(`${$.name} - 账号${$.index} - ${$.nickName || $.UserName}`, `【签到号 ${$.index}】: ${$.nickName || $.UserName}\n【签到时间】:  ${$.beanSignTime}\n${BarkContent}`);
+      }
+    }
+    //运行完成后，删除下载的文件
+    await deleteFile(resultPath);//删除result.txt
+    console.log(`\n\n*****************京东账号${$.index} ${$.nickName || $.UserName}京豆签到完成*******************\n\n`);
   } catch (e) {
     console.log("京东签到脚本执行异常:" + e);
   }
@@ -117,18 +119,18 @@ async function downFile () {
   // if (process.env.CDN_JD_DAILYBONUS) {
   //   url = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js';
   // } else if (process.env.JD_COOKIE) {
-  //   url = 'https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js';
+  //   url = 'https://raw.ggghhhusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js';
   // } else {
   //   url = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js';
   // }
   await downloadUrl();
   if ($.body) {
-    url = 'https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js';
+    url = 'https://raw.ggghhhusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js';
   } else {
     url = 'https://cdn.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js';
   }
   try {
-    const options = { "timeout": 10000 }
+    const options = { }
     if (process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
       const tunnel = require("tunnel");
       const agent = {
@@ -144,7 +146,7 @@ async function downFile () {
     await download(url, outPutUrl, options);
     console.log(`JD_DailyBonus.js文件下载完毕\n\n`);
   } catch (e) {
-    console.log("文件下载异常:" + e);
+    console.log("JD_DailyBonus.js 文件下载异常:" + e);
   }
 }
 
@@ -188,7 +190,7 @@ function TotalBean() {
         "Connection": "keep-alive",
         "Cookie": cookie,
         "Referer": "https://wqs.jd.com/my/jingdou/my.shtml?sceneval=2",
-        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.2.2;14.2;%E4%BA%AC%E4%B8%9C/9.2.2 CFNetwork/1206 Darwin/20.1.0")
+        "User-Agent": $.isNode() ? (process.env.JD_USER_AGENT ? process.env.JD_USER_AGENT : (require('./USER_AGENTS').USER_AGENT)) : ($.getdata('JDUA') ? $.getdata('JDUA') : "jdapp;iPhone;9.4.4;14.3;network/4g;Mozilla/5.0 (iPhone; CPU iPhone OS 14_3 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148;supportJDSHWK/1")
       },
       "timeout": 10000
     }
@@ -221,7 +223,7 @@ function TotalBean() {
     })
   })
 }
-function downloadUrl(url = 'https://raw.githubusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js') {
+function downloadUrl(url = 'https://raw.ggghhhusercontent.com/NobyDa/Script/master/JD-DailyBonus/JD_DailyBonus.js') {
   return new Promise(resolve => {
     const options = { url, "timeout": 10000 };
     if ($.isNode() && process.env.TG_PROXY_HOST && process.env.TG_PROXY_PORT) {
@@ -240,7 +242,12 @@ function downloadUrl(url = 'https://raw.githubusercontent.com/NobyDa/Script/mast
       try {
         if (err) {
           // console.log(`${JSON.stringify(err)}`)
-          console.log(`检测到您当前网络环境不能访问外网,将使用CDN下载JD_DailyBonus.js文件`)
+          console.log(`检测到您当前网络环境不能访问外网,将使用jsdelivr CDN下载JD_DailyBonus.js文件`);
+          await $.http.get({url: `https://purge.jsdelivr.net/gh/NobyDa/Script@master/JD-DailyBonus/JD_DailyBonus.js`, timeout: 10000}).then((resp) => {
+            if (resp.statusCode === 200) {
+              console.log(`JD_DailyBonus.js文件jsdelivr CDN缓存刷新成功`)
+            }
+          });
         } else {
           $.body = data;
         }
@@ -254,14 +261,20 @@ function downloadUrl(url = 'https://raw.githubusercontent.com/NobyDa/Script/mast
 }
 function requireConfig() {
   return new Promise(resolve => {
-    const file = 'jd_bean_sign.js';
-    fs.access(file, fs.constants.W_OK, (err) => {
-      resultPath = err ? '/tmp/result.txt' : resultPath;
-      JD_DailyBonusPath = err ? '/tmp/JD_DailyBonus.js' : JD_DailyBonusPath;
-      outPutUrl = err ? '/tmp/' : outPutUrl;
-      NodeSet = err ? '/tmp/CookieSet.json' : NodeSet;
-      resolve()
-    });
+    // const file = 'jd_bean_sign.js';
+    // fs.access(file, fs.constants.W_OK, (err) => {
+    //   resultPath = err ? '/tmp/result.txt' : resultPath;
+    //   JD_DailyBonusPath = err ? '/tmp/JD_DailyBonus.js' : JD_DailyBonusPath;
+    //   outPutUrl = err ? '/tmp/' : outPutUrl;
+    //   NodeSet = err ? '/tmp/CookieSet.json' : NodeSet;
+    //   resolve()
+    // });
+    //判断是否是云函数环境。原函数跟目录目录没有可写入权限，文件只能放到根目录下虚拟的/temp/文件夹（具有可写入权限）
+    resultPath = process.env.TENCENTCLOUD_RUNENV === 'SCF' ? '/tmp/result.txt' : resultPath;
+    JD_DailyBonusPath = process.env.TENCENTCLOUD_RUNENV === 'SCF' ? '/tmp/JD_DailyBonus.js' : JD_DailyBonusPath;
+    outPutUrl = process.env.TENCENTCLOUD_RUNENV === 'SCF' ? '/tmp/' : outPutUrl;
+    NodeSet = process.env.TENCENTCLOUD_RUNENV === 'SCF' ? '/tmp/CookieSet.json' : NodeSet;
+    resolve()
   })
 }
 function timeFormat(time) {

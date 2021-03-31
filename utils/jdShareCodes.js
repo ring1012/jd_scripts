@@ -10,7 +10,7 @@ exports.PLANT_BEAN_SHARECODES = [];
 exports.FRUITSHARECODES = [];
 exports.PETSHARECODES = [];
 exports.JDJOY_SHARECODES = [];
-const shareFile = process.env.SHARE_CODE_FILE || "./sharecode.log";
+process.env.SHARE_CODE_FILE = "./sharecode.log";
 let fileContent = '';
 if (process.env.SHARE_CODE_FILE) {
     try {

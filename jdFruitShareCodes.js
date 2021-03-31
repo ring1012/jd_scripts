@@ -17,7 +17,7 @@ let FruitShareCodes = [
 //   process.env.FRUITSHARECODES = logShareCodes.FRUITSHARECODES.join('&');
 // }
 
-// 判断github action里面是否有东东农场互助码
+// 判断ggghhh action里面是否有东东农场互助码
 if (process.env.FRUITSHARECODES) {
   if (process.env.FRUITSHARECODES.indexOf('&') > -1) {
     console.log(`您的东东农场互助码选择的是用&隔开\n`)
@@ -28,7 +28,7 @@ if (process.env.FRUITSHARECODES) {
   } else {
     FruitShareCodes = process.env.FRUITSHARECODES.split();
   }
-} else if (process.env.JD_COOKIE) {
+} else {
   console.log(`由于您环境变量(FRUITSHARECODES)里面未提供助力码，故此处运行将会给脚本内置的码进行助力，请知晓！`)
 }
 for (let i = 0; i < FruitShareCodes.length; i++) {
