@@ -1356,8 +1356,13 @@ async function signForFarm() {
 async function initForFarm() {
     const functionId = arguments.callee.name.toString();
     console.log(functionId)
-    $.farmInfo = await request(functionId, { "babelChannel": "121", "sid": "3c52b5f17ab2a42398939a27887eaf8w", "version": 18, "channel": 1 });
-    console.log($.farmInfo)
+    try {
+        $.farmInfo = await request(functionId, { "babelChannel": "121", "sid": "3c52b5f17ab2a42398939a27887eaf8w", "version": 18, "channel": 1 });
+        console.log($.farmInfo)
+
+    } catch (e) {
+     console.log(e)
+    }
     // return new Promise(resolve => {
     //   const option =  {
     //     url: `${JD_API_HOST}?functionId=initForFarm`,
