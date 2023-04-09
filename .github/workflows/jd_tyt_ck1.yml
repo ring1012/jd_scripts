@@ -6,7 +6,7 @@ name: jd_tyt_ck1.js
 on:
   workflow_dispatch:
   schedule:
-    - cron: '* 60 * 60 *'
+    - cron: '13 1 * * *'
   watch:
     types: started
   repository_dispatch:

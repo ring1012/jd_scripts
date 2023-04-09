@@ -6,7 +6,7 @@ name: bot_jd_bean_info.js
 on:
   workflow_dispatch:
   schedule:
-    - cron: '* 60 * 60 *'
+    - cron: '20 22 * * *'
   watch:
     types: started
   repository_dispatch:

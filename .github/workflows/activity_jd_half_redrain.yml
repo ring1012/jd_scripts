@@ -6,7 +6,7 @@ name: activity_jd_half_redrain.js
 on:
   workflow_dispatch:
   schedule:
-    - cron: '* 60 * 60 *'
+    - cron: '30 16-23/1 * * *'
   watch:
     types: started
   repository_dispatch:

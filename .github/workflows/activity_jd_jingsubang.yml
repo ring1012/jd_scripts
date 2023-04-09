@@ -6,7 +6,7 @@ name: activity_jd_jingsubang.js
 on:
   workflow_dispatch:
   schedule:
-    - cron: '* 60 * 60 *'
+    - cron: '0 0 * * *'
   watch:
     types: started
   repository_dispatch:
