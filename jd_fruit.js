@@ -1836,8 +1836,9 @@ function Env(t, e) {
             })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {hints: !1})), $task.fetch(t).then(t => {
                 const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                 e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-            }, t => e(t))) : {
+            }, t => e(t))) : (
                 console.log(4);
+                console.log(this.isNode());
                 this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
                     try {
                         if (t.headers["set-cookie"]) {
@@ -1854,7 +1855,7 @@ function Env(t, e) {
                     const {message: s, response: i} = t;
                     e(s, i, i && i.body)
                 }))
-            }
+        )
         }
 
         post(t, e = (() => {
