@@ -1825,10 +1825,6 @@ function Env(t, e) {
 
         initGotEnv(t) {
             this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar))
-            console.log("this.got")
-            console.log(this.got)
-            console.log("this.cktough")
-            console.log(this.cktough)
         }
 
         get(t, e = (() => {
@@ -1839,6 +1835,7 @@ function Env(t, e) {
                 const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                 e(null, {status: s, statusCode: i, headers: r, body: o}, o)
             }, t => e(t))) : (this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
+                console.log("redirect")
                     try {
                         if (t.headers["set-cookie"]) {
                             const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();
@@ -1854,7 +1851,7 @@ function Env(t, e) {
                 }, t => {
                     const {message: s, response: i} = t;
                     e(s, i, i && i.body)
-                }))
+                }).catch(errors){console.log(errors)})
         )
         }
 
