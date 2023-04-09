@@ -78,6 +78,7 @@ let lnrun = 0;
                 }
                 continue
             }
+            console.log(`\n开始拿水果\n`);
             message = '';
             subTitle = '';
             option = {};
@@ -105,6 +106,7 @@ let lnrun = 0;
     })
 async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName || $.UserName}`;
+    console.log("subtitle1")
     try {
         await initForFarm();
         if ($.farmInfo.farmUserPro) {
@@ -133,8 +135,10 @@ async function jdFruit() {
                 }
                 return
             }
+            console.log("subtitle2")
             await doDailyTask();
             await doTenWater(); //浇水十次
+            console.log("subtitle3")
             await getFirstWaterAward(); //领取首次浇水奖励
             await getTenWaterAward(); //领取10浇水奖励
             await getWaterFriendGotAward(); //领取为2好友浇水奖励
