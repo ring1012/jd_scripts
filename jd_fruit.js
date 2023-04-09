@@ -1677,7 +1677,7 @@ function Env(t, e) {
         }
 
         isNode() {
-            return true
+            return "undefined" != typeof module && !!module.exports
         }
 
         isQuanX() {
@@ -1834,8 +1834,7 @@ function Env(t, e) {
             })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {hints: !1})), $task.fetch(t).then(t => {
                 const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                 e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-            }, t => e(t))) : (
-                this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
+            }, t => e(t))) : (console.log(this.isNode()), console.log(this.initGotEnv(t)), this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
                     try {
                         if (t.headers["set-cookie"]) {
                             const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();
