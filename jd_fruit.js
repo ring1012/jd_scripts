@@ -1677,7 +1677,9 @@ function Env(t, e) {
         }
 
         isNode() {
-            return "undefined" != typeof module && !!module.exports
+            const val = "undefined" != typeof module && !!module.exports
+            console.log("isNode")
+            console.log(val)
         }
 
         isQuanX() {
@@ -1825,6 +1827,10 @@ function Env(t, e) {
 
         initGotEnv(t) {
             this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar))
+            console.log("this.got")
+            console.log(this.got)
+            console.log("this.cktough")
+            console.log(this.cktough)
         }
 
         get(t, e = (() => {
@@ -1834,7 +1840,7 @@ function Env(t, e) {
             })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {hints: !1})), $task.fetch(t).then(t => {
                 const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                 e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-            }, t => e(t))) : (console.log(this.isNode()),console.log(4), console.log(this.initGotEnv(t)), this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
+            }, t => e(t))) : (this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
                     try {
                         if (t.headers["set-cookie"]) {
                             const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();
