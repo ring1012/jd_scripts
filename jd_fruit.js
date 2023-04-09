@@ -1581,24 +1581,42 @@ function request(function_id, body = {}, timeout = 1000) {
         console.log(3)
         const req = taskUrl(function_id, body)
         console.log(req)
-        $.get(req, (err, resp, data) => {
-            try {
-                if (err) {
-                    console.log('\n东东农场: API查询请求失败 ‼️‼️')
-                    console.log(JSON.stringify(err));
-                    console.log(`function_id:${function_id}`)
-                    $.logErr(err);
-                } else {
-                    if (safeGet(data)) {
-                        data = JSON.parse(data);
-                    }
-                }
-            } catch (e) {
-                $.logErr(e, resp);
-            } finally {
-                resolve(data);
-            }
+        const got = require("got");
+        const cktough = require("tough-cookie");
+        const ckjar = new cktough.CookieJar
+        const t = req;
+        t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = ckjar))
+
+        got(t).then(h => {
+            console.log("success")
+            console.log(h)
+            const {statusCode: s, statusCode: i, headers: r, body: o} = h;
+            // e(null, {status: s, statusCode: i, headers: r, body: o}, o)
+        }, h => {
+            const {message: s, response: i} = h;
+            e(s, i, i && i.body)
+        }).catch(errors => {
+            console.log(errors)
         })
+
+        // $.get(req, (err, resp, data) => {
+        //     try {
+        //         if (err) {
+        //             console.log('\n东东农场: API查询请求失败 ‼️‼️')
+        //             console.log(JSON.stringify(err));
+        //             console.log(`function_id:${function_id}`)
+        //             $.logErr(err);
+        //         } else {
+        //             if (safeGet(data)) {
+        //                 data = JSON.parse(data);
+        //             }
+        //         }
+        //     } catch (e) {
+        //         $.logErr(e, resp);
+        //     } finally {
+        //         resolve(data);
+        //     }
+        // })
     })
 }
 
