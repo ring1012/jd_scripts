@@ -1677,7 +1677,7 @@ function Env(t, e) {
         }
 
         isNode() {
-            return "undefined" != typeof module && !!module.exports
+            return true
         }
 
         isQuanX() {
