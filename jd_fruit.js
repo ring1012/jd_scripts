@@ -1851,7 +1851,7 @@ function Env(t, e) {
                 }, t => {
                     const {message: s, response: i} = t;
                     e(s, i, i && i.body)
-                }).catch(errors){console.log(errors)})
+                }).catch(errors=>{console.log(errors)}))
         )
         }
 
