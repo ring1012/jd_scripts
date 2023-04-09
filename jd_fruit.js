@@ -1061,7 +1061,7 @@ async function collect() {
         await initForFarm();
         if ($.farmInfo.farmUserPro) {
             console.log(`\n【京东账号${$.index}（${$.UserName}）的${$.name}好友互助码】${$.farmInfo.farmUserPro.shareCode}\n`);
-            
+
         } else {
             //console.log(`初始化农场数据异常, 请登录京东 app查看农场0元水果功能是否正常。`);
         }
@@ -1508,8 +1508,11 @@ function TotalBean() {
 }
 
 function request(function_id, body = {}, timeout = 1000) {
+    console.log(1)
     return new Promise(resolve => {
+        console.log(2)
         setTimeout(() => {
+            console.log(3)
             const req = taskUrl(function_id, body)
             console.log(req)
             $.get(req, (err, resp, data) => {
