@@ -1665,6 +1665,7 @@ function Env(t, e) {
         }
 
         get(t) {
+            console.log("bbb")
             return this.send.call(this.env, t)
         }
 
@@ -1831,6 +1832,7 @@ function Env(t, e) {
 
         async get(t, e = (() => {
         })) {
+            console.log("aaa")
             t.headers && (delete t.headers["Content-Type"]);
             this.initGotEnv(t);
             const data = await this.got(t)
