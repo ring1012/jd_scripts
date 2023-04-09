@@ -1848,6 +1848,7 @@ function Env(t, e) {
                         this.logErr(t)
                     }
                 }).then(t => {
+                    console.log(t)
                     const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                     e(null, {status: s, statusCode: i, headers: r, body: o}, o)
                 }, t => {
