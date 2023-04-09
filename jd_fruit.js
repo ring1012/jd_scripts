@@ -1511,7 +1511,6 @@ function request(function_id, body = {}, timeout = 1000) {
     console.log(1)
     return new Promise(resolve => {
         console.log(2)
-        setTimeout(() => {
             console.log(3)
             const req = taskUrl(function_id, body)
             console.log(req)
@@ -1533,7 +1532,6 @@ function request(function_id, body = {}, timeout = 1000) {
                     resolve(data);
                 }
             })
-        }, timeout)
     })
 }
 
