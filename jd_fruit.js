@@ -1581,42 +1581,25 @@ function request(function_id, body = {}, timeout = 1000) {
         console.log(3)
         const req = taskUrl(function_id, body)
         console.log(req)
-        const got = require("got");
-        const cktough = require("tough-cookie");
-        const ckjar = new cktough.CookieJar
-        const t = req;
-        t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = ckjar))
 
-        got(t).then(h => {
-            console.log("success")
-            console.log(h)
-            const {statusCode: s, statusCode: i, headers: r, body: o} = h;
-            // e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-        }, h => {
-            const {message: s, response: i} = h;
-            e(s, i, i && i.body)
-        }).catch(errors => {
-            console.log(errors)
+        $.get(req, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log('\n东东农场: API查询请求失败 ‼️‼️')
+                    console.log(JSON.stringify(err));
+                    console.log(`function_id:${function_id}`)
+                    $.logErr(err);
+                } else {
+                    if (safeGet(data)) {
+                        data = JSON.parse(data);
+                    }
+                }
+            } catch (e) {
+                $.logErr(e, resp);
+            } finally {
+                resolve(data);
+            }
         })
-
-        // $.get(req, (err, resp, data) => {
-        //     try {
-        //         if (err) {
-        //             console.log('\n东东农场: API查询请求失败 ‼️‼️')
-        //             console.log(JSON.stringify(err));
-        //             console.log(`function_id:${function_id}`)
-        //             $.logErr(err);
-        //         } else {
-        //             if (safeGet(data)) {
-        //                 data = JSON.parse(data);
-        //             }
-        //         }
-        //     } catch (e) {
-        //         $.logErr(e, resp);
-        //     } finally {
-        //         resolve(data);
-        //     }
-        // })
     })
 }
 
@@ -1845,20 +1828,14 @@ function Env(t, e) {
             this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar))
         }
 
-        get(t, e = (() => {
+        async get(t, e = (() => {
         })) {
-            t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), ((this.initGotEnv(t),
-                    this.got(t).then(t => {
-                        console.log(t)
-                        const {statusCode: s, statusCode: i, headers: r, body: o} = t;
-                        e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-                    }, t => {
-                        const {message: s, response: i} = t;
-                        e(s, i, i && i.body)
-                    }).catch(errors => {
-                        console.log(errors)
-                    }))
-            )
+            t.headers && (delete t.headers["Content-Type"]);
+            this.initGotEnv(t);
+            const data = await this.got(t)
+            const {statusCode: s, statusCode: i, headers: r, body: o} = data;
+            e(null, {status: s, statusCode: i, headers: r, body: o}, o)
+            
         }
 
         post(t, e = (() => {
