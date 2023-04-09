@@ -1677,9 +1677,7 @@ function Env(t, e) {
         }
 
         isNode() {
-            const val = "undefined" != typeof module && !!module.exports
-            console.log("isNode")
-            console.log(val)
+            return true
         }
 
         isQuanX() {
