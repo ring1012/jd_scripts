@@ -1510,7 +1510,9 @@ function TotalBean() {
 function request(function_id, body = {}, timeout = 1000) {
     return new Promise(resolve => {
         setTimeout(() => {
-            $.get(taskUrl(function_id, body), (err, resp, data) => {
+            const req = taskUrl(function_id, body)
+            console.log(req)
+            $.get(req, (err, resp, data) => {
                 try {
                     if (err) {
                         console.log('\n东东农场: API查询请求失败 ‼️‼️')
