@@ -1617,6 +1617,7 @@ function safeGet(data) {
 function taskUrl(function_id, body = {}) {
     return {
         url: `${JD_API_HOST}?functionId=${function_id}&body=${encodeURIComponent(JSON.stringify(body))}&appid=wh5`,
+        method: 'GET',
         headers: {
             "Host": "api.m.jd.com",
             "Accept": "*/*",
