@@ -52,7 +52,7 @@ const retainWater = $.isNode() ? (process.env.retainWater ? process.env.retainWa
 let jdNotify = false; //是否关闭通知，false打开通知推送，true关闭通知推送
 let jdFruitBeanCard = false; //农场使用水滴换豆卡(如果出现限时活动时100g水换20豆,此时比浇水划算,推荐换豆),true表示换豆(不浇水),false表示不换豆(继续浇水),脚本默认是浇水
 let randomCount = $.isNode() ? 20 : 5;
-const JD_API_HOST = 'https://www.baidu.com/client.action';
+const JD_API_HOST = 'https://api.m.jd.com/client.action';
 const urlSchema = `openjd://virtual?params=%7B%20%22category%22:%20%22jump%22,%20%22des%22:%20%22m%22,%20%22url%22:%20%22https://h5.m.jd.com/babelDiy/Zeus/3KSjXqQabiTuD1cJ28QskrpWoBKT/index.html%22%20%7D`;
 let lnrun = 0;
 !(async () => {
@@ -78,7 +78,6 @@ let lnrun = 0;
                 }
                 continue
             }
-            console.log(`\n开始拿水果\n`);
             message = '';
             subTitle = '';
             option = {};
@@ -106,7 +105,6 @@ let lnrun = 0;
     })
 async function jdFruit() {
     subTitle = `【京东账号${$.index}】${$.nickName || $.UserName}`;
-    console.log("subtitle1")
     try {
         await initForFarm();
         if ($.farmInfo.farmUserPro) {
@@ -135,10 +133,8 @@ async function jdFruit() {
                 }
                 return
             }
-            console.log("subtitle2")
             await doDailyTask();
             await doTenWater(); //浇水十次
-            console.log("subtitle3")
             await getFirstWaterAward(); //领取首次浇水奖励
             await getTenWaterAward(); //领取10浇水奖励
             await getWaterFriendGotAward(); //领取为2好友浇水奖励
@@ -1355,18 +1351,7 @@ async function signForFarm() {
  */
 async function initForFarm() {
     const functionId = arguments.callee.name.toString();
-    console.log(functionId)
-    try {
-        $.farmInfo = await request(functionId, { "babelChannel": "121", "sid": "3c52b5f17ab2a42398939a27887eaf8w", "version": 18, "channel": 1 });
-        console.log($.farmInfo)
-
-    } catch (e) {
-     console.log(e)
-    }finally {
-        console.log("final");
-        console.log($.farmInfo)
-
-    }
+    $.farmInfo = await request(functionId, { "babelChannel": "121", "sid": "3c52b5f17ab2a42398939a27887eaf8w", "version": 18, "channel": 1 });
     // return new Promise(resolve => {
     //   const option =  {
     //     url: `${JD_API_HOST}?functionId=initForFarm`,
@@ -1533,7 +1518,6 @@ function request(function_id, body = {}, timeout = 1000) {
                         console.log(`function_id:${function_id}`)
                         $.logErr(err);
                     } else {
-                        console.log(data)
                         if (safeGet(data)) {
                             data = JSON.parse(data);
                         }
