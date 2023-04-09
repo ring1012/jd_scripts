@@ -6,7 +6,7 @@ name: jd_supermarket_exchange.js
 on:
   workflow_dispatch:
   schedule:
-    - cron: ' 59 9 * * *'
+    - cron: '59 9 * * *'
   watch:
     types: started
   repository_dispatch:
