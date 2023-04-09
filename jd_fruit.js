@@ -1834,17 +1834,7 @@ function Env(t, e) {
             })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {hints: !1})), $task.fetch(t).then(t => {
                 const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                 e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-            }, t => e(t))) : (this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
-                console.log("redirect")
-                    try {
-                        if (t.headers["set-cookie"]) {
-                            const s = t.headers["set-cookie"].map(this.cktough.Cookie.parse).toString();
-                            s && this.ckjar.setCookieSync(s, null), e.cookieJar = this.ckjar
-                        }
-                    } catch (t) {
-                        this.logErr(t)
-                    }
-                }).then(t => {
+            }, t => e(t))) : (this.isNode() && (this.initGotEnv(t), this.got(t).then(t => {
                     console.log(t)
                     const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                     e(null, {status: s, statusCode: i, headers: r, body: o}, o)
