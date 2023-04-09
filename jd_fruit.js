@@ -1583,6 +1583,7 @@ function request(function_id, body = {}, timeout = 1000) {
         console.log(req)
 
         $.get(req, (err, resp, data) => {
+            console.log("has data")
             try {
                 if (err) {
                     console.log('\n东东农场: API查询请求失败 ‼️‼️')
