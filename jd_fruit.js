@@ -1524,6 +1524,7 @@ function request(function_id, body = {}, timeout = 1000) {
                         console.log(`function_id:${function_id}`)
                         $.logErr(err);
                     } else {
+                        console.log(data)
                         if (safeGet(data)) {
                             data = JSON.parse(data);
                         }
