@@ -1837,8 +1837,8 @@ function Env(t, e) {
                 const {statusCode: s, statusCode: i, headers: r, body: o} = t;
                 e(null, {status: s, statusCode: i, headers: r, body: o}, o)
             }, t => e(t))) : (
-                console.log(4);
-                console.log(this.isNode());
+                console.log(4) &&
+                console.log(this.isNode()) &&
                 this.isNode() && (this.initGotEnv(t), this.got(t).on("redirect", (t, e) => {
                     try {
                         if (t.headers["set-cookie"]) {
