@@ -1836,7 +1836,11 @@ function Env(t, e) {
             t.headers && (delete t.headers["Content-Type"]);
             this.initGotEnv(t);
             console.log("ccc")
-            const data = await this.got(t)
+            try{
+                const data = await this.got(t)
+            }catch (exp){
+                console.log(exp)
+            }
             console.log("ddd")
             console.log(data)
             const {statusCode: s, statusCode: i, headers: r, body: o} = data;
