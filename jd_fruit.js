@@ -1578,27 +1578,27 @@ function request(function_id, body = {}, timeout = 1000) {
     console.log(1)
     return new Promise(resolve => {
         console.log(2)
-            console.log(3)
-            const req = taskUrl(function_id, body)
-            console.log(req)
-            $.get(req, (err, resp, data) => {
-                try {
-                    if (err) {
-                        console.log('\n东东农场: API查询请求失败 ‼️‼️')
-                        console.log(JSON.stringify(err));
-                        console.log(`function_id:${function_id}`)
-                        $.logErr(err);
-                    } else {
-                        if (safeGet(data)) {
-                            data = JSON.parse(data);
-                        }
+        console.log(3)
+        const req = taskUrl(function_id, body)
+        console.log(req)
+        $.get(req, (err, resp, data) => {
+            try {
+                if (err) {
+                    console.log('\n东东农场: API查询请求失败 ‼️‼️')
+                    console.log(JSON.stringify(err));
+                    console.log(`function_id:${function_id}`)
+                    $.logErr(err);
+                } else {
+                    if (safeGet(data)) {
+                        data = JSON.parse(data);
                     }
-                } catch (e) {
-                    $.logErr(e, resp);
-                } finally {
-                    resolve(data);
                 }
-            })
+            } catch (e) {
+                $.logErr(e, resp);
+            } finally {
+                resolve(data);
+            }
+        })
     })
 }
 
@@ -1627,8 +1627,7 @@ function taskUrl(function_id, body = {}) {
             "Accept-Language": "zh-CN,zh-Hans;q=0.9",
             "Referer": "https://carry.m.jd.com/",
             "Cookie": cookie
-        },
-        timeout: 10000
+        }
     }
 }
 
@@ -1830,20 +1829,18 @@ function Env(t, e) {
 
         get(t, e = (() => {
         })) {
-            t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), this.isSurge() || this.isLoon() ? (this.isSurge() && this.isNeedRewrite && (t.headers = t.headers || {}, Object.assign(t.headers, {"X-Surge-Skip-Scripting": !1})), $httpClient.get(t, (t, s, i) => {
-                !t && s && (s.body = i, s.statusCode = s.status), e(t, s, i)
-            })) : this.isQuanX() ? (this.isNeedRewrite && (t.opts = t.opts || {}, Object.assign(t.opts, {hints: !1})), $task.fetch(t).then(t => {
-                const {statusCode: s, statusCode: i, headers: r, body: o} = t;
-                e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-            }, t => e(t))) : (this.isNode() && (this.initGotEnv(t), this.got(t).then(t => {
-                    console.log(t)
-                    const {statusCode: s, statusCode: i, headers: r, body: o} = t;
-                    e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-                }, t => {
-                    const {message: s, response: i} = t;
-                    e(s, i, i && i.body)
-                }).catch(errors=>{console.log(errors)}))
-        )
+            t.headers && (delete t.headers["Content-Type"], delete t.headers["Content-Length"]), ((this.initGotEnv(t),
+                    this.got(t).then(t => {
+                        console.log(t)
+                        const {statusCode: s, statusCode: i, headers: r, body: o} = t;
+                        e(null, {status: s, statusCode: i, headers: r, body: o}, o)
+                    }, t => {
+                        const {message: s, response: i} = t;
+                        e(s, i, i && i.body)
+                    }).catch(errors => {
+                        console.log(errors)
+                    }))
+            )
         }
 
         post(t, e = (() => {
