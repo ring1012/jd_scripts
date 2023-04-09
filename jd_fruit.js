@@ -1362,6 +1362,10 @@ async function initForFarm() {
 
     } catch (e) {
      console.log(e)
+    }finally {
+        console.log("final");
+        console.log($.farmInfo)
+
     }
     // return new Promise(resolve => {
     //   const option =  {
