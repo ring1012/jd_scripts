@@ -1837,7 +1837,7 @@ function Env(t, e) {
             try{
                 console.log(this.got)
                 console.log(t)
-                const data = await this.got(t)
+                const data = await this.got.get(t)
                 console.log("after data")
             }catch (exp){
                 console.log("after data exception")
