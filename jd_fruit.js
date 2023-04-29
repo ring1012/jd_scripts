@@ -1839,8 +1839,7 @@ function Env(t, e) {
                     // 设置请求超时时间
                     timeout:4000});
                 console.log(myGot)
-                const data = await myGot.get("https://www.baidu.com/")
-                console.log(data)
+                 myGot.get("https://www.baidu.com/").then(ret=>console.log(ret));
             }catch (exp){
                 console.log("after data exception")
 
