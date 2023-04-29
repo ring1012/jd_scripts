@@ -1575,7 +1575,8 @@ function TotalBean() {
 }
 
 function request(function_id, body = {}, timeout = 1000) {
-    console.log(1)
+    const theGot = require("got");
+    theGot("https://www.baidu.com").then(a=>console.log(a))
     return new Promise(resolve => {
         console.log(2)
         console.log(3)
