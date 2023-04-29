@@ -1830,7 +1830,7 @@ function Env(t, e) {
             this.got = this.got ? this.got : require("got"), this.cktough = this.cktough ? this.cktough : require("tough-cookie"), this.ckjar = this.ckjar ? this.ckjar : new this.cktough.CookieJar, t && (t.headers = t.headers ? t.headers : {}, void 0 === t.headers.Cookie && void 0 === t.cookieJar && (t.cookieJar = this.ckjar))
         }
 
-        async get(t, e = (() => {
+        async get(t, e = (async () => {
         })) {
             t.headers && (delete t.headers["Content-Type"]);
             this.initGotEnv(t);
@@ -1839,7 +1839,8 @@ function Env(t, e) {
                     // 设置请求超时时间
                     timeout:4000});
                 console.log(myGot)
-                 myGot.get("https://www.baidu.com/").then(ret=>console.log(ret));
+                const data = await myGot.get("https://www.baidu.com/")
+                console.log(data)
             }catch (exp){
                 console.log("after data exception")
 
