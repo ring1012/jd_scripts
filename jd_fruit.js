@@ -1835,10 +1835,10 @@ function Env(t, e) {
             t.headers && (delete t.headers["Content-Type"]);
             this.initGotEnv(t);
             try{
-                console.log(this.got)
-                console.log(t)
-                const data = await this.got.get(t)
-                console.log("after data")
+                const myGot = require("got");
+                console.log(myGot)
+                const data = await myGot("https://www.baidu.com/")
+                console.log(data)
             }catch (exp){
                 console.log("after data exception")
 
