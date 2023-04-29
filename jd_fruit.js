@@ -1835,9 +1835,11 @@ function Env(t, e) {
             t.headers && (delete t.headers["Content-Type"]);
             this.initGotEnv(t);
             try{
-                const myGot = require("got");
+                const myGot = require("got").entend({  retry:0,
+                    // 设置请求超时时间
+                    timeout:4000});
                 console.log(myGot)
-                const data = await myGot("https://www.baidu.com/")
+                const data = await myGot.get("https://www.baidu.com/")
                 console.log(data)
             }catch (exp){
                 console.log("after data exception")
