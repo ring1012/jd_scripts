@@ -1832,20 +1832,23 @@ function Env(t, e) {
 
         async get(t, e = (() => {
         })) {
-            console.log("aaa")
             t.headers && (delete t.headers["Content-Type"]);
             this.initGotEnv(t);
-            console.log("ccc")
             try{
+                console.log(this.got)
+                console.log(t)
                 const data = await this.got(t)
+                console.log("after data")
             }catch (exp){
+                console.log("after data exception")
+
                 console.log(exp)
             }
             console.log("ddd")
             console.log(data)
             const {statusCode: s, statusCode: i, headers: r, body: o} = data;
             e(null, {status: s, statusCode: i, headers: r, body: o}, o)
-            
+
         }
 
         post(t, e = (() => {
